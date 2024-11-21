@@ -17,46 +17,53 @@ type MessageProps = {
   text: string;
   messageId: string;
   onDelete: (id: string) => void;
+  senderUid: string;
+  userRole: string;
+  userId: string;
 };
 
 
 
-export const ReceivedMessage = ({ photoURL, text, messageId, onDelete, senderUid, userRole, userId }: MessageProps & { senderUid: string; userRole: string; userId: string }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const characterLimit = 300;
+const isValidUrl = (text: string) => {
+  const urlRegex = /https?:\/\/(www\.)?[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+/;
+  return urlRegex.test(text);
+};
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
 
+export const ReceivedMessage = ({
+  photoURL,
+  text,
+  messageId,
+  onDelete,
+  senderUid,
+  userRole,
+  userId,
+}: MessageProps) => {
   const canDelete = userId === senderUid || userRole === "Professor";
 
   return (
-    <div className='flex w-full justify-start mb-1'>
-      <div className='flex w-max gap-4'>
-        <div className='flex flex-row gap-1 items-center'>
+    <div className="flex w-full justify-start mb-1">
+      <div className="flex w-max gap-4">
+        <div className="flex flex-row gap-1 items-center">
           <img src={photoURL} alt="" className="rounded-full" style={{ width: 30, height: 30 }} />
-          <div className='bg-[rgb(247,77,233)] text-white rounded-e-3xl p-2'>
+          <div className="bg-[rgb(247,77,233)] text-white rounded-e-3xl p-2">
             <div className="text-white p-3 max-w-md whitespace-pre-wrap break-words">
-              {isExpanded || text.length <= characterLimit ? (
-                <span>{text}</span>
-              ) : (
-                <span>{text.slice(0, characterLimit)}...</span>
-              )}
-              {text.length > characterLimit && (
-                <button
-                  onClick={toggleExpand}
-                  className="text-sm text-blue-200  ml-2 hover:text-pink-500"
+              {isValidUrl(text) ? (
+                <a
+                  href={text}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-300 underline hover:text-blue-500"
                 >
-                  {isExpanded ? "Ver menos" : "Ver mais"}
-                </button>
+                  {text}
+                </a>
+              ) : (
+                <span>{text}</span>
               )}
             </div>
           </div>
           {canDelete && (
-            <button
-              onClick={() => onDelete(messageId)}
-            >
+            <button onClick={() => onDelete(messageId)}>
               <img src="/trash.svg" alt="" style={{ width: 15, height: 15 }} />
             </button>
           )}
@@ -66,50 +73,48 @@ export const ReceivedMessage = ({ photoURL, text, messageId, onDelete, senderUid
   );
 };
 
-
-// Componente para mensagens enviadas
-export const SentMessage = ({ photoURL, text, messageId, onDelete, senderUid, userRole, userId }: MessageProps & { senderUid: string; userRole: string; userId: string }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const characterLimit = 300;
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const canDelete = userId === senderUid || userRole === "professor";
+export const SentMessage = ({
+  photoURL,
+  text,
+  messageId,
+  onDelete,
+  senderUid,
+  userRole,
+  userId,
+}: MessageProps) => {
+  const canDelete = userId === senderUid || userRole === "Professor";
 
   return (
-    <div className='flex w-full justify-end mb-1'>
-      <div className='flex w-max gap-4'>
-        <div className='flex flex-row-reverse gap-1 items-center'>
-          <img src={photoURL || './Guest.png'} alt="" className="rounded-full" style={{ width: 30, height: 30 }} />
-          <div className='bg-[rgb(105,52,184)] text-white rounded-s-3xl p-2'>
+    <div className="flex w-full justify-end mb-1">
+      <div className="flex w-max gap-4">
+        <div className="flex flex-row-reverse gap-1 items-center">
+          <img src={photoURL} alt="" className="rounded-full" style={{ width: 30, height: 30 }} />
+          <div className="bg-[rgb(105,52,184)] text-white rounded-s-3xl p-2">
             <div className="text-white p-3 max-w-md whitespace-pre-wrap break-words">
-              {isExpanded || text.length <= characterLimit ? (
-                <span>{text}</span>
+              {isValidUrl(text) ? (
+                <div>
+                  <p>atividade:</p>
+                  <div className="bg-[rgba(56,42,136,0.47)] text-white rounded-s-3xl p-2">
+                    <a
+                      href={text}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-300 underline hover:text-blue-500"
+                    >
+                      {text}
+                    </a>
+                  </div>
+                </div>
               ) : (
-                <span>{text.slice(0, characterLimit)}...</span>
-              )}
-              {text.length > characterLimit && (
-                <button
-                  onClick={toggleExpand}
-                  className="text-sm text-blue-200  ml-2 hover:text-pink-500"
-                >
-                  {isExpanded ? "Ver menos" : "Ver mais"}
-                </button>
+                <span>{text}</span>
               )}
             </div>
           </div>
-          <div>
-            {canDelete && (
-              <button
-                onClick={() => onDelete(messageId)}
-                className="text-sm text-red-500 underline ml-2 hover:text-red-700"
-              >
-                <img src="/trash.svg" alt="" style={{ width: 15, height: 15 }} />
-              </button>
-            )}
-          </div>
+          {canDelete && (
+            <button onClick={() => onDelete(messageId)}>
+              <img src="/trash.svg" alt="" style={{ width: 15, height: 15 }} />
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -125,6 +130,8 @@ export default function MessageItem({ user, chatId }: any) {
   const [newMessage, setNewMessage] = useState("");
   const [lastLoadedTimestamp, setLastLoadedTimestamp] = useState<Date | null>(null);
   const notifiedMessages = useRef(new Set());
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [activityLink, setActivityLink] = useState("");
 
   useEffect(() => {
 
@@ -233,12 +240,12 @@ export default function MessageItem({ user, chatId }: any) {
     }
   }
 
-  const sendMessage = async () => {
-    if (newMessage.trim() === "") return;
+  const sendMessage = async (content: string) => {
+    if (content.trim() === "") return;
 
     try {
       await addDoc(collection(db, "chats", chatId, "messages"), {
-        content: newMessage,
+        content,
         senderUid: user?.id,
         sender: user?.displayName || userInfo.username,
         photoURL: user?.avatar || "",
@@ -247,6 +254,15 @@ export default function MessageItem({ user, chatId }: any) {
       setNewMessage("");
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
+    }
+  };
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  const handleSendActivity = () => {
+    if (activityLink.trim() !== "") {
+      sendMessage(`${activityLink}`);
+      setActivityLink("");
+      setShowDropdown(false);
     }
   };
 
@@ -309,6 +325,36 @@ export default function MessageItem({ user, chatId }: any) {
         </div>
 
         <div className="new-message w-full flex items-center justify-center gap-2 bg-[#3E2878] h-[3rem] px-4 rounded-lg">
+          <div className="relative">
+            {/* Ícone de clipe */}
+            <img
+              src="/anexo.svg"
+              alt="clipe"
+              width={20}
+              height={20}
+              onClick={toggleDropdown}
+              className="cursor-pointer"
+            />
+            {showDropdown && (
+              <div className="dropdown absolute bg-[#3E2878] shadow-lg p-2 rounded-md bottom-10 left-0 z-10 w-64">
+                <h4 className="text-white text-sm font-bold">Enviar Atividade</h4>
+                <input
+                  type="text"
+                  placeholder="Cole o link da atividade"
+                  value={activityLink}
+                  onChange={(e) => setActivityLink(e.target.value)}
+                  className="border bg-[#3E2878] w-full p-1 rounded-md mb-2"
+                />
+                <button
+                  onClick={handleSendActivity}
+                  className="bg-[#501ADD] text-white py-1 px-2 rounded-md hover:bg-[#6934b8]"
+                >
+                  Enviar
+                </button>
+              </div>
+            )}
+          </div>
+
           <input
             type="text"
             value={newMessage}
@@ -316,10 +362,10 @@ export default function MessageItem({ user, chatId }: any) {
             placeholder="Escreva sua mensagem"
             className="input-message w-full bg-transparent outline-none text-white h-full"
             onKeyDown={(e) => {
-              if (e.key === "Enter") sendMessage();
+              if (e.key === "Enter") sendMessage(newMessage);
             }}
           />
-          <button onClick={sendMessage} className="w-8 h-8 rounded-full flex items-center justify-center bg-[#501ADD] text-white">
+          <button onClick={() => sendMessage(newMessage)} className="w-8 h-8 rounded-full flex items-center justify-center bg-[#501ADD] text-white">
             <img src="/send.svg" alt="send" width={20} height={20} />
           </button>
         </div>

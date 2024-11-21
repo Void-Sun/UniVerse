@@ -1,25 +1,32 @@
 'use client'
 import { useState } from "react";
-import { db, addDoc, collection, serverTimestamp} from "../../firebase/firebase";
+import { db, addDoc, collection, serverTimestamp } from "../../firebase/firebase";
 
 export default function Modal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const [chatName, setChatName] = useState('');
     const [chatDescription, setChatDescription] = useState('');
-    
+
 
     const handleCreateChat = async () => {
-        try {
-            await addDoc(collection(db, "chats"), {
-              name: chatName,
-              description: chatDescription,
-              createdAt: serverTimestamp(),
-            });
-            setChatName("");
-            setChatDescription("");
-            onClose();
-          } catch (error) {
-            console.error("Erro ao criar o chat:", error);
-          }
+        if (!chatName || !chatDescription) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        } else {
+
+
+            try {
+                await addDoc(collection(db, "chats"), {
+                    name: chatName,
+                    description: chatDescription,
+                    createdAt: serverTimestamp(),
+                });
+                setChatName("");
+                setChatDescription("");
+                onClose();
+            } catch (error) {
+                console.error("Erro ao criar o chat:", error);
+            }
+        }
     };
 
     if (!isOpen) return null;
@@ -61,13 +68,13 @@ export default function Modal({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     >
                         Cancelar
                     </button>
-                    
-                        <button
-                            onClick={handleCreateChat}
-                            className="bg-green-500 text-white px-4 py-2 rounded"
-                        >
-                            Criar
-                        </button>
+
+                    <button
+                        onClick={handleCreateChat}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                    >
+                        Criar
+                    </button>
                 </div>
             </div>
         </div>

@@ -6,8 +6,6 @@ type SettingsModalProps = {
 };
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const [notifications, setNotifications] = useState(true);
-  const [language, setLanguage] = useState("pt");
   const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -58,13 +56,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </button>
         </div>
 
-        <div className="mt-6 flex justify-end">
           <button
             onClick={() => setIsTermsOpen(true)}
             className="px-4 py-2 bg-[#1E0D4A] text-white rounded hover:bg-[#1e0d4a5e] mr-4"
           >
             Termos e Condições
           </button>
+        <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-[#1E0D4A] text-white rounded hover:bg-[#1e0d4a5e]"

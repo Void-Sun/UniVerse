@@ -13,6 +13,7 @@ const UserTable = () => {
     isSuperAdmin?: boolean; // Flag para superadmin
   }
 
+
   const [users, setUsers] = useState<User[]>([]);
   const [isAdmin, setIsAdmin] = useState(false); // Verificar se é administrador
   const [currentUserId, setCurrentUserId] = useState<string>(""); // ID do usuário logado
@@ -47,6 +48,7 @@ const UserTable = () => {
     checkAdminRole();
   }, [router]);
 
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {

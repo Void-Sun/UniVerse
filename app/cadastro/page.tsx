@@ -242,7 +242,7 @@ export default function Cadastro() {
 
             <div className="flex items-center justify-center gap-2 w-full px-4">
 
-              <p className="text-white text-sm">Or continue with</p> <hr className="w-60 h-[0.9px] bg-white" />
+              <p className="text-white text-sm">Ou continue com...</p> <hr className="w-60 h-[0.9px] bg-white" />
 
             </div>
 

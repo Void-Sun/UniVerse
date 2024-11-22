@@ -51,6 +51,9 @@ body {
 }
 
 .scrollbar::-webkit-scrollbar {
-  appearance: none;
   width: 1px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: blueviolet;
 }

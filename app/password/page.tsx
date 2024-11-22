@@ -90,10 +90,10 @@ const Star = () => {
 
           <div className="flex flex-col gap-7 items-center justify-center">
 
-            <p className="font-bold text-2xl text-[#501ADD] ">Forgot your password?</p>
-            <p className="text-white">Enter your email address and we will send you a link to reset your password</p>
+            <p className="font-bold text-2xl text-[#501ADD] ">Esqueceu a senha?</p>
+            <p className="text-white">Digite seu endereço de e-mail e enviaremos um link para redefinir sua senha</p>
             <input onChange={handlepassChange} value={email} type="email" className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white" placeholder="Email" />
-            <button onClick={resetpassword} className="bg-[#501ADD] rounded-lg border-0 text-white py-3 px-24 hover:bg-violet-600 transition-colors ease-in-out duration-300" >Send</button>
+            <button onClick={resetpassword} className="bg-[#501ADD] rounded-lg border-0 text-white py-3 px-24 hover:bg-violet-600 transition-colors ease-in-out duration-300" >Enviar</button>
           </div>
         </div>
       </main>

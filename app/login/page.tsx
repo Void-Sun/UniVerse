@@ -178,7 +178,7 @@ export default function Login() {
                 <input id="senha" type="text" placeholder="Password" autoComplete="off" value={senha} onChange={handleSenhaChange} className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white" />
                 <div className="flex justify-end">
 
-                  <Link href='./password' className="text-white text-xs text-end hover:text-neutral-500 transition-colors ease-in-out duration-200">Forgot your password?</Link>
+                  <Link href='./password' className="text-white text-xs text-end hover:text-neutral-500 transition-colors ease-in-out duration-200">Esqueceu a senha?</Link>
                 </div>
               </div>
 

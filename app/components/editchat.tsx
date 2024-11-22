@@ -88,7 +88,7 @@ export default function EditChat({ Open, Close, chatId }: { Open: boolean; Close
                                         <input
                                             className="rounded-sm px-2 py-1 bg-[#382270] focus:outline-none focus:ring-2 focus:ring-purple-600"
                                             type="text"
-                                            placeholder="Novo Nome de Usuário"
+                                            placeholder="Novo Nome de Chat"
                                             value={chatInfo.name}
                                             onChange={(e) => setChatInfo({ ...chatInfo, name: e.target.value })}
                                         />

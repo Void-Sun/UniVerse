@@ -35,6 +35,10 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [content, setContent] = useState<any>('');
   const [error, setError] = useState<any[]>([]);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const toggleMostrarSenha = () => {
+    setMostrarSenha((prev) => !prev);
+  };
 
   async function handleLogin() {
     const provider = new GoogleAuthProvider
@@ -157,7 +161,7 @@ export default function Login() {
       <>
         <main className="flex min-h-screen flex-col items-center ">
 
-          <div className="flex items-center my-14 justify-center gap-3">
+        <div className="flex items-center my-10 justify-center gap-3">
             <Image src="/image.png" alt="logo" width={75} height={75}></Image>
             <p className="text-white text-4xl font-bold p-4">UniVerse</p>
           </div>
@@ -175,7 +179,26 @@ export default function Login() {
               </div>
 
               <div className="flex flex-col gap-1 mb-3">
-                <input id="senha" type="text" placeholder="Password" autoComplete="off" value={senha} onChange={handleSenhaChange} className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white" />
+              <div className="flex flex-col mb-3">
+                <div className="relative">
+                  <input
+                    id="senha"
+                    type={mostrarSenha ? "text" : "password"}
+                    autoComplete="off"
+                    placeholder="Senha"
+                    className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white"
+                    value={senha}
+                    onChange={handleSenhaChange}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 text-white"
+                    onClick={toggleMostrarSenha}
+                  >
+                    {mostrarSenha ? (<Image src="/eye.svg" alt="Google" width={25} height={25} />) : (<Image src="/closeye.svg" alt="Google" width={25} height={25} />)}
+                  </button>
+                </div>
+              </div>
                 <div className="flex justify-end">
 
                   <Link href='./password' className="text-white text-xs text-end hover:text-neutral-500 transition-colors ease-in-out duration-200">Esqueceu a senha?</Link>

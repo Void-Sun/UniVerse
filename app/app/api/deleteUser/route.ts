@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAuth } from "firebase-admin/auth"; // Import the correct Firebase Admin module
+import { getAuth } from "../../../../firebase/firebase-admin"; // Import the correct Firebase Admin module
 
 export async function POST(req: Request) {
   try {

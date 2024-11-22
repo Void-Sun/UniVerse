@@ -13,7 +13,7 @@ const Star = () => {
   const [randomTop] = useState(Math.random());
   const [randomLeft] = useState(Math.random());
   const [randomDuration] = useState(Math.random() * 10 + 5);
-  const [randomDirection] = useState(Math.random() * 360); 
+  const [randomDirection] = useState(Math.random() * 360);
   const [shouldFall] = useState(Math.random() < 0.10);
   return (
     <div
@@ -37,6 +37,10 @@ export default function Cadastro() {
   const [content, setContent] = useState<any>('');
   const [error, setError] = useState<any[]>([]);
   const [level, setLevel] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const toggleMostrarSenha = () => {
+    setMostrarSenha((prev) => !prev);
+  };
 
   const handleUserChange = (user: React.ChangeEvent<HTMLInputElement>) => {
     setUser(user.target.value);
@@ -215,19 +219,24 @@ export default function Cadastro() {
               </div>
 
               <div className="flex flex-col mb-3">
-                <input id="senha" type="password" autoComplete="off" placeholder="Senha" className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white" value={senha} onChange={handleSenhaChange} />
-              </div>
-
-              <div>
-                <select
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                  className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white"
-                >
-                  <option value="">Selecionar o cargo</option>
-                  <option value="Aluno">Aluno</option>
-                  <option value="Professor">Professor</option>
-                </select>
+                <div className="relative">
+                  <input
+                    id="senha"
+                    type={mostrarSenha ? "text" : "password"}
+                    autoComplete="off"
+                    placeholder="Senha"
+                    className="bg-zinc-800 rounded-md px-2 w-80 border-[1px] py-2 transition-colors ease-in-out duration-500 focus:border-violet-700 outline-none text-white"
+                    value={senha}
+                    onChange={handleSenhaChange}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 text-white"
+                    onClick={toggleMostrarSenha}
+                  >
+                    {mostrarSenha ? (<Image src="/eye.svg" alt="Google" width={25} height={25} />) : (<Image src="/closeye.svg" alt="Google" width={25} height={25} />)}
+                  </button>
+                </div>
               </div>
 
             </div>

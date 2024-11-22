@@ -98,7 +98,7 @@ export default function Home() {
     const [chats, setChats] = useState<ChatData[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [favorites, setFavorites] = useState<string[]>([]);
-    const [showFavorites, setShowFavorites] = useState(false);     
+    const [showFavorites, setShowFavorites] = useState(false);
     const [filteredChats, setFilteredChats] = useState<ChatData[]>([]);
     const [activeChat, setActiveChat] = useState<any>(null);
     const [user, setUser] = useState<any>(null);
@@ -162,7 +162,7 @@ export default function Home() {
 
     const handleFilterToggle = () => {
         setShowFavorites(!showFavorites);
-    
+
         if (!showFavorites) {
             setFilteredChats(chats.filter((chat) => favorites.includes(chat.id)));
         } else {
@@ -173,92 +173,92 @@ export default function Home() {
 
 
     const addFavorite = async (userId: string, chatId: string) => {
-    try {
-        // Adiciona um documento na subcoleção "favorites" do usuário
-        await setDoc(doc(db, "users", userId, "favorites", chatId), {
-            chatId: chatId,
-        });
-        console.log("Chat favoritado com sucesso!");
-    } catch (error) {
-        console.error("Erro ao adicionar favorito:", error);
-    }
-};
-
-    
-const removeFavorite = async (userId: string, chatId: string) => {
-    try {
-        // Remove o documento da subcoleção "favorites" do usuário
-        await deleteDoc(doc(db, "users", userId, "favorites", chatId));
-        console.log("Chat removido dos favoritos!");
-    } catch (error) {
-        console.error("Erro ao remover favorito:", error);
-    }
-};
-
-    
-
-const handleFavoriteToggle = async (chatId: string) => {
-    const userId = auth.currentUser?.uid;
-
-    if (!userId) {
-        console.error("Usuário não autenticado");
-        return;
-    }
-
-    // Verifica se o chatId já está nos favoritos
-    const isFavorite = favorites.includes(chatId);
-
-    // Atualiza os favoritos no Firestore
-    if (isFavorite) {
-        await removeFavorite(userId, chatId);  // Remove dos favoritos no Firestore
-    } else {
-        await addFavorite(userId, chatId);  // Adiciona aos favoritos no Firestore
-    }
-
-    // Atualiza o estado de favoritos localmente
-    const updatedFavorites = isFavorite
-        ? favorites.filter(id => id !== chatId)
-        : [...favorites, chatId];
-
-    setFavorites(updatedFavorites);
-    
-    // Atualiza os favoritos no localStorage
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-};
+        try {
+            // Adiciona um documento na subcoleção "favorites" do usuário
+            await setDoc(doc(db, "users", userId, "favorites", chatId), {
+                chatId: chatId,
+            });
+            console.log("Chat favoritado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao adicionar favorito:", error);
+        }
+    };
 
 
-const fetchFavorites = async (userId: string) => {
-    if (!userId) return [];
-
-    const favoritesRef = collection(db, "users", userId, "favorites");
-    const snapshot = await getDocs(favoritesRef);
-
-    // Extrai os IDs dos chats favoritos
-    const favoriteChats = snapshot.docs.map(doc => doc.id);
-
-    return favoriteChats;
-};
+    const removeFavorite = async (userId: string, chatId: string) => {
+        try {
+            // Remove o documento da subcoleção "favorites" do usuário
+            await deleteDoc(doc(db, "users", userId, "favorites", chatId));
+            console.log("Chat removido dos favoritos!");
+        } catch (error) {
+            console.error("Erro ao remover favorito:", error);
+        }
+    };
 
 
-// Ao carregar o componente
-useEffect(() => {
-    const userId = auth.currentUser?.uid;
 
-    if (userId) {
-        // Buscar favoritos do Firestore
-        const fetchAndUpdateFavorites = async () => {
-            const firestoreFavorites = await fetchFavorites(userId);
+    const handleFavoriteToggle = async (chatId: string) => {
+        const userId = auth.currentUser?.uid;
 
-            // Atualiza os favoritos no estado
-            setFavorites(firestoreFavorites);
+        if (!userId) {
+            console.error("Usuário não autenticado");
+            return;
+        }
 
-            // Também armazena no localStorage para persistência
-            localStorage.setItem('favorites', JSON.stringify(firestoreFavorites));
-        };
+        // Verifica se o chatId já está nos favoritos
+        const isFavorite = favorites.includes(chatId);
 
-        fetchAndUpdateFavorites();
-    }
-}, [auth.currentUser?.uid]);
+        // Atualiza os favoritos no Firestore
+        if (isFavorite) {
+            await removeFavorite(userId, chatId);  // Remove dos favoritos no Firestore
+        } else {
+            await addFavorite(userId, chatId);  // Adiciona aos favoritos no Firestore
+        }
+
+        // Atualiza o estado de favoritos localmente
+        const updatedFavorites = isFavorite
+            ? favorites.filter(id => id !== chatId)
+            : [...favorites, chatId];
+
+        setFavorites(updatedFavorites);
+
+        // Atualiza os favoritos no localStorage
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    };
+
+
+    const fetchFavorites = async (userId: string) => {
+        if (!userId) return [];
+
+        const favoritesRef = collection(db, "users", userId, "favorites");
+        const snapshot = await getDocs(favoritesRef);
+
+        // Extrai os IDs dos chats favoritos
+        const favoriteChats = snapshot.docs.map(doc => doc.id);
+
+        return favoriteChats;
+    };
+
+
+    // Ao carregar o componente
+    useEffect(() => {
+        const userId = auth.currentUser?.uid;
+
+        if (userId) {
+            // Buscar favoritos do Firestore
+            const fetchAndUpdateFavorites = async () => {
+                const firestoreFavorites = await fetchFavorites(userId);
+
+                // Atualiza os favoritos no estado
+                setFavorites(firestoreFavorites);
+
+                // Também armazena no localStorage para persistência
+                localStorage.setItem('favorites', JSON.stringify(firestoreFavorites));
+            };
+
+            fetchAndUpdateFavorites();
+        }
+    }, [auth.currentUser?.uid]);
 
 
     const CreateChat = () => (
@@ -292,43 +292,42 @@ useEffect(() => {
                             />
                             {userInfo.role === "Professor" && <CreateChat />}
                         </div>
-                            <button
-                                className="text-white mx-2"
-                                onClick={handleFilterToggle}
-                            >
-                                {showFavorites ? "Favoritos" : "Todos"}
-                            </button>
+                        <button
+                            className="text-white mx-2"
+                            onClick={handleFilterToggle}
+                        >
+                            {showFavorites ? "Favoritos" : "Todos"}
+                        </button>
 
                         <div className="scrollbar bg-[#2C1B39] dark:bg-[#8f6bab] overflow-y-scroll flex-1">
                             {filteredChats.map((chat) => (
                                 <Chat
-                                onClick={() => setActiveChat(chat)}
-                                active={activeChat?.id === chat.id}
-                                data={{ title: chat.name, description: chat.description }}
-                                isFavorite={favorites.includes(chat.id)} // Checa se o chat está nos favoritos
-                                onFavoriteToggle={() => handleFavoriteToggle(chat.id)} // Alterna favorito
-                            />
+                                    onClick={() => setActiveChat(chat)}
+                                    active={activeChat?.id === chat.id}
+                                    data={{ title: chat.name, description: chat.description }}
+                                    isFavorite={favorites.includes(chat.id)} // Checa se o chat está nos favoritos
+                                    onFavoriteToggle={() => handleFavoriteToggle(chat.id)} // Alterna favorito
+                                />
 
                             ))}
                         </div>
 
-                        <div className="flex w-full items-center h-[6rem] justify-center p-4">
+                        <div className="flex w-full items-center h-[6rem] justify-center">
                             {user ? (
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={user.avatar || "/Guest.png"}
-                                        alt={`${user.displayName}'s avatar`}
-                                        className="w-12 h-12 rounded-full"
-                                        onClick={() => setOpenProfile(true)}
-                                    />
+                                <div className="flex items-center w-full p-10 justify-between">
                                     <div>
-                                        <p className="text-white">{userInfo.username || user.displayName}</p>
+                                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpenProfile(true)}>
+                                            <img src={user.avatar || "/Guest.png"} alt={`${user.displayName}'s avatar`} className="w-12 h-12 rounded-full" />
+                                            <p className="text-white">{userInfo.username || user.displayName}</p>
+                                        </div>
+                                        <Perfil Open={openProfile} Close={() => setOpenProfile(false)} />
                                     </div>
-                                    <button onClick={() => setIsSettingsOpen(true)}>
-                                        <Image src="/config.svg" alt="Configurações" width={30} height={30} />
-                                    </button>
-                                    <Perfil Open={openProfile} Close={() => setOpenProfile(false)} />
-                                    <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+                                    <div>
+                                        <div onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 cursor-pointer">
+                                            <Image src="/config.svg" alt="Configurações" width={30} height={40} />
+                                        </div>
+                                        <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+                                    </div>
                                 </div>
                             ) : (
                                 <p className="text-white">Nenhum usuário autenticado</p>

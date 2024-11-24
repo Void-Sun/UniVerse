@@ -223,9 +223,9 @@ export default function Login() {
 
             <div className="flex flex-row gap-3">
 
-              <button onClick={handleLogin} ><Image src="/google.svg" alt="Google" width={40} height={40} /></button>
-              <button onClick={handleFacebookLogin} ><Image src="/facebook.svg" alt="Facebook" width={40} height={40} /></button>
-              <button onClick={handleGithubLogin} ><Image src="/github.svg" alt="Facebook" width={40} height={40} /></button>
+              <button onClick={handleLogin} ><Image src="/Google.svg" alt="Google" width={40} height={40} /></button>
+              <button onClick={handleFacebookLogin} ><Image src="/Facebook.svg" alt="Facebook" width={40} height={40} /></button>
+              <button onClick={handleGithubLogin} ><Image src="/Github.svg" alt="Facebook" width={40} height={40} /></button>
 
             </div>
 
